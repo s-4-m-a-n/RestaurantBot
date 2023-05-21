@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dashboard</title>
+  </head>
+  <body>
+    <h1>Today's Special</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Discount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in todays_special %}
+        <tr>
+          <td>{{ item["id"] }}</td>
+          <td>{{ item["name"] }}</td>
+          <td>{{ item["price"] }}</td>
+          <td>{{ item["discount"] }}</td>
+          <td>
+            <form action="/delete_item" method="post" style="display: inline;">
+              <input type="hidden" name="item_id" value="{{ item['item_id'] }}">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <form action="/add_todays_special" method="post">
+      <label for="special_item">Item ID:</label>
+      <input type="text" name="special_item" id="special_item" required>
+      <button type="submit">Add</button>
+    </form>
+
+  </body>
+</html>

@@ -1,0 +1,187 @@
+{% extends "base.html" %} {% block title %}Order management{% endblock %} {% block content %}
+<div class="container">
+    <h2 class="bg-secondary"><b>Order Management</b></h2>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="bg-info">
+                        <th>Id</th>
+                        <th>Customer Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Comments</th>
+                        <th>date</th>
+                        <th>Order Detail</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.full_name }}</td>
+                        <td>{{ order.contact_number }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{{ order.comments }}</td>
+                        <td>{{ order.reg_date }}</td>
+
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal" data-order_id="{{ order['id'] }}">
+                            show
+                        </button>
+
+                        </td>
+                        <td>
+                            <div class="dropdown">
+
+                                {% if order.status == 'pending' %} {% set btn_class = "secondary" %} {% elif order.status == "delivering" %} {% set btn_class = "warning" %} {% elif order.status == "delivered" %} {% set btn_class = "success" %} {% endif %}
+
+                                <button class="btn btn-{{btn_class}} dropdown-toggle" type="button" id="statusDropdown_{{ order['id']}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ order.status}}
+                            </button>
+                                <div class="dropdown-menu" aria-labelledby="statusDropdown" data-order_id="{{ order['id'] }}">
+                                    <ul>
+                                        <li><a class="dropdown-item" href="#" data-status="pending">Pending</a></li>
+                                        <li><a class="dropdown-item" href="#" data-status="delivering">Delivering</a></li>
+                                        <li><a class="dropdown-item" href="#" data-status="delivered">Delivered</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <a class="btn btn-danger" data-method="delete" href="/delete_order/{{ order['id'] }}" onclick="return confirm('Data will be permanently deleted, Are you sure?')">
+                            Delete
+                        </a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal to display orders-->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Order info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <table id="data-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be populated dynamically here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Model section ends -->
+
+<script>
+    // Function to fetch data from the server and populate the modal
+    function fetchData(order_id) {
+        $.ajax({
+            url: "/fetch_order_items",
+            type: "GET",
+            data: {
+                order_id: order_id
+            },
+            success: function(data) {
+                // Clear existing table rows
+                $('#data-table tbody').empty();
+                orders = data.data
+                    // Populate the table with fetched data
+                for (var i = 0; i < orders.length; i++) {
+                    var row = '<tr>';
+                    row += '<td>' + (i + 1) + '</td>';
+                    // row += '<td>' + orders[i].order_id + '</td>';
+                    row += '<td>' + orders[i].item + '</td>';
+                    row += '<td>' + orders[i].quantity + '</td>';
+                    row += '</tr>';
+                    $('#data-table tbody').append(row);
+                }
+            },
+            error: function(error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+
+    // Event listener when the modal is shown
+    $('#orderModal').on('shown.bs.modal', function(event) {
+        // Fetch data from the server and populate the modal
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var order_id = button.data('order_id');
+
+        fetchData(order_id);
+    });
+
+
+
+    $('.dropdown-menu a').click(function(e) {
+        e.preventDefault();
+
+        // Get the status value from the data attribute
+        var new_status = $(this).data('status');
+        // Get the order ID from the parent card
+        var order_id = $(this).closest('.dropdown-menu').data('order_id');
+
+        let text = "Do you want to change to status?";
+        if (confirm(text) == false) {
+            return null;
+        }
+
+        // Send an AJAX request to update the order status
+        $.ajax({
+            url: '/update_order_status',
+            type: 'POST',
+            data: {
+                'order_id': order_id,
+                'new_status': new_status
+            },
+            success: function(data) {
+                status_color_mapper = {
+                    "pending": "btn-secondary",
+                    "delivering": "btn-warning",
+                    "delivered": "btn-success"
+                }
+                var btn = $("#statusDropdown_" + order_id)
+                btn.text(new_status)
+
+                btn.removeClass(function(index, className) {
+                    matched = className.match("btn-[a-z]+");
+                    return matched[0];
+                });
+
+                btn.addClass(status_color_mapper[new_status]);
+            }
+
+        });
+
+    });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+version: "3.1"
+
+nlu:
+- intent: browse_menu
+  examples: |
+    - I am hungry, can you show me the menu
+    - I would like to order something
+    - menu please
+
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+- intent: ask_veg_nonveg_menu
+  examples: |
+    - can you show me the [veg]{"entity": "cuisine_type", "value":"veg"} menu?
+    - [vegetarian]{"entity":"cuisine_type", "value":"veg"} item?
+    - can you show me the [non veg]{"entity":"cuisine_type", "value":"non-veg"} menu?
+    - [Non-vegetarian]{"entity":"cuisine_type", "value":"non-veg"} item?
+    - I would like to have some [non veg]{"entity":"cuisine_type", "value":"non-veg"} cuisine, can you show me the menu?
+
+- intent: make_order
+  examples: |
+    - I would like to order [2](quantity) [chicken tikka](cuisine) and [4](quantity) plate [salad](cuisine)
+    - Can I get [chicken tikka](cuisine)?
+
+
+- intent: full_name
+  examples: |
+    - My name is [Suman Dhakal](full_name)
+    - This is [Suman Dhakal](full_name)
+    - Place the order under [Ram Bahadur](full_name)
+
+- intent: contact_number
+  examples: |
+    - my mobile number is [9827332211](contact_number)
+
+- intent: delivery_address
+  examples: |
+    - delivery address is [belbari-2, Morang](delivery_address)

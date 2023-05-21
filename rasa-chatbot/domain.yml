@@ -1,0 +1,135 @@
+version: "3.1"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - bot_challenge
+  - ask_veg_nonveg_menu
+  - browse_menu
+  - make_order
+  - full_name
+  - delivery_address
+  - contact_number
+
+
+responses:
+  utter_greet:
+  - text: "Hey! What can I do for you today?"
+
+  utter_goodbye:
+  - text: "Bye, thank you "
+  - text: "take care !! Have a nice day"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_browse_menu:
+    - text: "this is todays special, \n 1.chicken tikka \n 2. Salad"
+
+  utter_ask_rephrase:
+    - text: I'm sorry, I didn't quite understand that. Could you rephrase?
+
+  utter_default:
+  - text: I'm sorry, I can not understand you? I will forward the message to the human operator" 
+
+  utter_thank_you:
+  - text: "thank you for the order! Have a great day"
+  - text: "Thank you for the order! you can check the order status or cancel the order"
+
+  utter_want_to_order:
+  - text: "Do you want to make an order?"
+
+  utter_order_now:
+  - text: "Please make an order"
+  - text: "What would you like to order?"
+
+  utter_order_confirmation:
+  - text: "Confirm order?"
+
+  utter_show_order:
+  - text: "Order: {orders}"
+
+  utter_ask_full_name:
+  - text: "Enter your full name"
+
+  utter_ask_contact_number:
+  - text: "Enter your contact number"
+
+  utter_ask_delivery_address:
+  - text: "Enter your delivery address"
+
+  utter_ask_comments:
+  - text: "iF you have any comment, you may give"
+  
+  utter_cancel_msg:
+  - text: "your order has been successfully cancelled"
+
+entities:
+  - cuisine_type
+  - cuisine
+  - quantity
+  - full_name
+  - contact_number
+  - delivery_address
+
+slots:
+  orders:
+    type: list
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  full_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: full_name
+  
+  contact_number:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: contact_number
+  
+  delivery_address:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: delivery_address
+  
+  comments:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+         - active_loop: order_form
+           requested_slot: comments
+
+
+actions:
+  - action_show_menu
+  - action_extract_order
+  - action_show_order_detail
+  - validate_order_form
+  - action_submit_order
+  
+
+forms:
+  order_form:
+    required_slots:
+      - orders
+      - full_name
+      - contact_number
+      - delivery_address
+      - comments
+    

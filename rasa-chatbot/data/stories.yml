@@ -1,0 +1,61 @@
+version: "3.1"
+
+stories:
+- story: story form browsing the general menu
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: browse_menu
+  - action: action_show_menu
+  - action: utter_want_to_order
+  - checkpoint: check_ask_for_order
+
+- story: story for making an order 
+  steps:
+  - checkpoint: check_ask_for_order
+  - intent: affirm
+  - action: utter_order_now
+  - intent: make_order
+  - action: action_extract_order
+  - checkpoint: form_filling
+
+- story: story for not making an order
+  steps:
+  - checkpoint: check_ask_for_order
+  - intent: deny
+  - action: utter_goodbye
+
+- story: story veg or non veg path
+  steps:
+    - intent: ask_veg_nonveg_menu
+    - action: action_show_menu
+    - intent: make_order
+    - action: action_extract_order
+    - checkpoint: form_filling
+
+
+- story: form filling path 
+  steps:
+    - checkpoint: form_filling
+    - action: order_form
+    - active_loop: order_form
+    - slot_was_set:
+      - requested_slot: null
+    - action: action_show_order_detail
+    - checkpoint: order_confirmation_path
+  
+- story: order confirmation affirm
+  steps:
+    - checkpoint: order_confirmation_path
+    - intent: affirm
+    - action: action_submit_order
+    - action: utter_thank_you
+
+- story: order confirmation deny
+  steps:
+    - checkpoint: order_confirmation_path
+    - intent: deny
+    - action: utter_cancel_msg
+
+
+  

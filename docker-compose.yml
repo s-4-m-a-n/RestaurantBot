@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  flask_app:
+      container_name: flask_app
+      build:
+        context: ./flask-app
+      ports:
+        - 5000:5000
+      # volumes:
+      #   - ./flask-app:/app
+      networks:
+        - my-network
+      depends_on:
+        - rasa
+      environment:
+        - RASA_SERVER_URL=http://localhost:5005/webhooks/rest/webhook
+
+  rasa:
+    container_name: rasa_server
+    build:
+      context: ./rasa-chatbot
+    ports:
+      - 5005:5005
+    depends_on:
+      - rasa_actions
+    networks:
+      - my-network
+    # volumes:
+    #   - ./rasa-chatbot:/app
+    environment:
+      - RASA_ACTIONS_ENDPOINT=http://rasa_actions:5055/webhook
+
+  rasa_actions:
+    container_name: rasa_actions
+    build:
+      context: ./rasa-actions
+
+    ports:
+      - 5055:5055
+    # volumes:
+    #   - ./rasa-actions:/app
+    networks:
+      - my-network
+    environment:
+      - base_URL=http://flask_app:5000
+
+networks:
+  my-network:
+    driver: bridge
