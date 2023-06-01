@@ -1,16 +1,15 @@
 # Exclude files and directories for Rasa chatbot
 # rasa/models
-rasa-chatbot/logs
 rasa-chatbot/.*
 !rasa-chatbot/.env
 # rasa/data
 
 # Exclude files and directories for Rasa action server
-rasa-actions/models
+# rasa-actions/models
 rasa-actions/logs
 rasa-actions/__pycache__
 rasa-actions/*.pyc
-rasa-actions/Dockerfile
+# rasa-actions/Dockerfile
 rasa-actions/.*
 !rasa-actions/.env
 # Exclude files and directories for Flask app

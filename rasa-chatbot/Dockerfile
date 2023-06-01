@@ -8,7 +8,7 @@ COPY . .
 
 USER root
 
-#RUN  rasa train
+# RUN  rasa train
 
 # Expose the Rasa server ports
 EXPOSE 5005

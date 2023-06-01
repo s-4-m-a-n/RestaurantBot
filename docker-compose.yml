@@ -7,16 +7,17 @@ services:
         context: ./flask-app
       ports:
         - 5000:5000
-      # volumes:
-      #   - ./flask-app:/app
+      volumes:
+        - ./flask-app:/app
       networks:
         - my-network
       depends_on:
-        - rasa
+        - rasa_server
       environment:
         - RASA_SERVER_URL=http://localhost:5005/webhooks/rest/webhook
+          # - RASA_SERVER_URL=http://rasa_server:5005/
 
-  rasa:
+  rasa_server:
     container_name: rasa_server
     build:
       context: ./rasa-chatbot
@@ -26,8 +27,8 @@ services:
       - rasa_actions
     networks:
       - my-network
-    # volumes:
-    #   - ./rasa-chatbot:/app
+    volumes:
+      - ./rasa-chatbot:/app
     environment:
       - RASA_ACTIONS_ENDPOINT=http://rasa_actions:5055/webhook
 
@@ -35,15 +36,15 @@ services:
     container_name: rasa_actions
     build:
       context: ./rasa-actions
-
     ports:
       - 5055:5055
     # volumes:
-    #   - ./rasa-actions:/app
+    #   - ./rasa-actions:/app     #throws error due to automatic creation of entrypoints.sh
     networks:
       - my-network
     environment:
       - base_URL=http://flask_app:5000
+      # - base_URL=https://ab1f-103-232-154-25.ngrok-free.app
 
 networks:
   my-network:

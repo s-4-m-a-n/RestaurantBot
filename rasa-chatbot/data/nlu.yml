@@ -79,7 +79,26 @@ nlu:
 - intent: contact_number
   examples: |
     - my mobile number is [9827332211](contact_number)
+    - It is [9827332211](contact_number)
+    - [9827332211](contact_number)
 
 - intent: delivery_address
   examples: |
     - delivery address is [belbari-2, Morang](delivery_address)
+
+- intent: ask_order_status
+  examples: |
+    - Can you show me the order status
+    - Can I get my order status
+
+- intent: give_token
+  examples: |
+    - my token number is [xvu12](token)
+    - here is my token [aij1j](token)
+    - token [bcd1F](token)
+    - [12bs1](token)
+    - this is my order token [F1a2F](token)
+
+
+
+ 

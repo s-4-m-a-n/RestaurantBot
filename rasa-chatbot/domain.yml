@@ -16,12 +16,18 @@ intents:
   - full_name
   - delivery_address
   - contact_number
+  - ask_order_status
+  - give_token
 
 
 responses:
   utter_greet:
-  - text: "Hey! What can I do for you today?"
-
+  - text: "Hey 🙏! What can I do for you today?"
+    buttons:
+      - title: "order food"
+        payload: /browse_menu
+      - title: "check status"
+        payload: /ask_order_status
   utter_goodbye:
   - text: "Bye, thank you "
   - text: "take care !! Have a nice day"
@@ -30,7 +36,7 @@ responses:
   - text: "I am a bot, powered by Rasa."
 
   utter_browse_menu:
-    - text: "this is todays special, \n 1.chicken tikka \n 2. Salad"
+    - text: "This is todays special, \n 1.chicken tikka \n 2. Salad"
 
   utter_ask_rephrase:
     - text: I'm sorry, I didn't quite understand that. Could you rephrase?
@@ -65,10 +71,13 @@ responses:
   - text: "Enter your delivery address"
 
   utter_ask_comments:
-  - text: "iF you have any comment, you may give"
+  - text: "If you have any comment, you may give"
   
   utter_cancel_msg:
   - text: "your order has been successfully cancelled"
+
+  utter_ask_token:
+  - text: "please enter the token to check the status"
 
 entities:
   - cuisine_type
@@ -77,6 +86,7 @@ entities:
   - full_name
   - contact_number
   - delivery_address
+  - token
 
 slots:
   orders:
@@ -114,7 +124,14 @@ slots:
         conditions:
          - active_loop: order_form
            requested_slot: comments
-
+  token:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: token_form
+            requested_slot: token
 
 actions:
   - action_show_menu
@@ -122,6 +139,7 @@ actions:
   - action_show_order_detail
   - validate_order_form
   - action_submit_order
+  - action_show_order_status
   
 
 forms:
@@ -132,4 +150,7 @@ forms:
       - contact_number
       - delivery_address
       - comments
+  token_form:
+    required_slots:
+      - token
     

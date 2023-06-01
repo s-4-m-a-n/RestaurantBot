@@ -5,12 +5,13 @@ import os
 db = SQLAlchemy()
 DB_NAME = "database.db"
 BASE_DIR = "."
+DB_ENGINE = f'sqlite:///{os.path.join(BASE_DIR, DB_NAME)}'
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'this is my secret key'
     print(os.path.join(BASE_DIR, DB_NAME))
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(BASE_DIR, DB_NAME)}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = DB_ENGINE
     db.init_app(app)
 
     from .order_views import views

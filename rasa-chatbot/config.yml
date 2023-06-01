@@ -42,7 +42,8 @@ policies:
   - name: RulePolicy
     core_fallback_threshold: 0.3
     enable_fallback_prediction: True
-  - name: MemoizationPolicy
+  - name: AugmentedMemoizationPolicy
   - name: TEDPolicy
     epochs: 50
     # max_history: 8
+  - name: FormPolicy

@@ -7,6 +7,12 @@ from rasa_sdk.types import DomainDict
 import requests
 import json
 import os
+import logging
+
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level="DEBUG")
 
 base_URL = os.getenv("base_URL")
 
@@ -89,7 +95,7 @@ class ValidateRestaurantForm(FormValidationAction):
         
         if validated_orders:
             # dispatcher.utter_message(text=f"validated_orders: {validated_orders}")
-            print("validated orders: ",validated_orders)
+            logging.debug("validated orders: ",validated_orders)
             return {"orders": validated_orders}
         
         else:
@@ -163,10 +169,45 @@ class ActionSubmitOrderDetail(Action):
 
         # save order
         response = self.save_order(tracker.slots)
-        print("#response:", response)
+        # logging.debug("#response:", response)
         if response.status_code == 200:
             data = json.loads(response.text)
             print("#data: ", data)
-            dispatcher.utter_message(text="order has been succssfully saved, your  order ID: {}".format(data["order_id"]))
+            dispatcher.utter_message(text="order has been succssfully saved, your  order token: {}".format(data["token"]))
   
         return [SlotSet("orders", [])]
+
+class ActionShowOrderStatus(Action):
+    def name(self) -> Text:
+        return "action_show_order_status"
+    
+    @staticmethod
+    def fetch_order_status(token):
+        endpoint_API = f'{base_URL}/get_order_status'
+        response = requests.get(endpoint_API, params={'token': token})
+        logger.debug("token: {}".format(token))
+        logger.debug(f" response: {response}")
+        return response
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        response = self.fetch_order_status(tracker.slots['token'])
+        logger.info(response)
+        buttons = []
+
+        buttons.append({"title": "order food", "payload":"/browse_menu"})
+        buttons.append({"title":"check status", "payload":"/ask_order_status"})
+
+    
+        if response.status_code == 404:
+            message = "sorry, no data found. It seems you have entered invalid token: {}".format(tracker.slots['token'])
+        elif response.status_code == 200:
+            message = f"Order status: {response.text}"
+        else:
+            message = "server error 💀"
+        
+        dispatcher.utter_message(text=message, buttons=buttons)
+        return [SlotSet("token", None)]
+        

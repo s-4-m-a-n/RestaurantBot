@@ -3,6 +3,8 @@ from flask import (Blueprint, render_template, request,
 from . import db
 from .models import OrderInfo, OrderItem
 import os
+import requests
+
 
 views = Blueprint('order_views', __name__)
 
@@ -10,7 +12,9 @@ RASA_SERVER_URL = os.getenv("RASA_SERVER_URL")
 
 @views.route("/chat")
 def chatroom():
+    # url = "https://af34-103-232-154-60.ngrok-free.app/rasa_server/api"
     return render_template("chatroom.html", RASA_SERVER_URL=RASA_SERVER_URL)
+    # return render_template("chatroom.html", RASA_SERVER_URL=url)
 
 @views.route("/")
 def show_orders():
@@ -21,9 +25,6 @@ def show_orders():
 @views.route("/fetch_order_items")
 def fetch_order_by_id():
     order_items = OrderItem.query.filter_by(order_id = int(request.args.get('order_id'))).all()
-    # query_order = [order for order in orders if order["id"] == )]
-    print(order_items)
-
     response = [{
         "item": order_item.item,
         "quantity": order_item.quantity
@@ -40,14 +41,14 @@ def update_order_status():
     new_status = request.form["new_status"]
     
     if new_status not in ["pending", "delivering", "delivered"]:
-        return {"status_code": 200, "message": "invalid new status option" }
+        return jsonify({"message": "invalid new status option" })
     
     order_info = OrderInfo.query.get(order_id)
     order_info.status = new_status
     db.session.commit()
 
     # flash("status changed successfully", category="success")
-    return {"status_code": 200, "message": "status has been changed successfully"}
+    return jsonify({"message": "status has been changed successfully"})
 
 
 @views.route("/insert_order", methods=["POST"])
@@ -60,9 +61,9 @@ def insert_order():
     comment = order_info["comments"]
 
     order = OrderInfo(full_name=name,
-                            contact_number=contact,
-                            address=address,
-                            comments=comment)
+                      contact_number=contact,
+                      address=address,
+                      comments=comment)
     db.session.add(order)
     db.session.commit()
 
@@ -75,7 +76,7 @@ def insert_order():
     
     db.session.commit()
 
-    return jsonify({"order_id": order.id})
+    return jsonify({"token": order.token})
 
 
 @views.route("/delete_order/<int:id>", methods=["GET"])
@@ -88,3 +89,12 @@ def delete_order(id):
     db.session.commit()
     # Delete correspondig items
     return redirect(url_for("order_views.show_orders"))
+
+@views.route("/get_order_status", methods=['GET'])
+def get_order_status():
+    token = request.args.get("token")
+    order = OrderInfo.query.filter_by(token=token).first()
+    if not order:
+        return jsonify({"message": "token doesnot exist"}), 404
+    
+    return order.status
