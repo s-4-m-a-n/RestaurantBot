@@ -1,5 +1,5 @@
 from flask import (Blueprint, render_template, request, 
-                   flash, jsonify, redirect, url_for)
+                   flash, jsonify, redirect, url_for, send_file)
 from . import db
 from .models import OrderInfo, OrderItem
 import os
@@ -98,3 +98,8 @@ def get_order_status():
         return jsonify({"message": "token doesnot exist"}), 404
     
     return order.status
+
+@views.route("/get_menu", methods=['GET'])
+def get_menu():
+    menu_file = "./static/images/menu.jpg"
+    return send_file(menu_file, mimetype="image/jpeg")

@@ -47,6 +47,11 @@ responses:
   utter_thank_you:
   - text: "thank you for the order! Have a great day"
   - text: "Thank you for the order! you can check the order status or cancel the order"
+    buttons:
+        - title: "order food"
+          payload: /browse_menu
+        - title: "check status"
+          payload: /ask_order_status
 
   utter_want_to_order:
   - text: "Do you want to make an order?"
@@ -76,8 +81,8 @@ responses:
   utter_cancel_msg:
   - text: "your order has been successfully cancelled"
 
-  utter_ask_token:
-  - text: "please enter the token to check the status"
+  # utter_ask_token:
+  # - text: "please enter the token to check the status"
 
 entities:
   - cuisine_type
@@ -132,6 +137,11 @@ slots:
         conditions:
           - active_loop: token_form
             requested_slot: token
+  prev_token:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
 
 actions:
   - action_show_menu
@@ -140,7 +150,7 @@ actions:
   - validate_order_form
   - action_submit_order
   - action_show_order_status
-  
+  - action_ask_token
 
 forms:
   order_form:

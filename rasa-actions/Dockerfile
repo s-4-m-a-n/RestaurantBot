@@ -18,4 +18,8 @@ EXPOSE 5055
 
 # Set the entrypoint command to run the Rasa Action Server
 CMD ["start", "--actions", "actions"]
-#CMD ["rasa", "run", "actions", "--actions", "actions"]
+# CMD ["start"]
+
+# CMD ["rasa", "run", "actions", "--actions", "actions"]
+# CMD ["rasa", "run", "actions"]
+

@@ -49,7 +49,6 @@ stories:
     - checkpoint: order_confirmation_path
     - intent: affirm
     - action: action_submit_order
-    - action: utter_ask_token
     - action: utter_thank_you
 
 - story: order confirmation deny
@@ -59,7 +58,7 @@ stories:
     - action: utter_cancel_msg
 
 
-- story: Cheking order status
+- story: Checking order status
   steps:
   - intent: ask_order_status
   - action: token_form

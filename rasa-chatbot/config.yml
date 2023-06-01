@@ -18,7 +18,6 @@ pipeline:
   - name: RegexFeaturizer
   - name: LexicalSyntacticFeaturizer
   - name: CountVectorsFeaturizer
-  - name: CountVectorsFeaturizer
     analyzer: char_wb
     min_ngram: 1
     max_ngram: 4
@@ -42,8 +41,7 @@ policies:
   - name: RulePolicy
     core_fallback_threshold: 0.3
     enable_fallback_prediction: True
-  - name: AugmentedMemoizationPolicy
+  - name: MemoizationPolicy
   - name: TEDPolicy
-    epochs: 50
+    epochs: 20
     # max_history: 8
-  - name: FormPolicy
