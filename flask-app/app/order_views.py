@@ -36,19 +36,28 @@ def fetch_order_by_id():
 
 @views.route("/update_order_status", methods=['POST'])
 def update_order_status():
-    print("order_id: ",request.form["order_id"] , "status:", request.form["new_status"] )
-    order_id = request.form["order_id"]
+    print("order_id: ",request.form["order_token"] , "status:", request.form["new_status"] )
+    order_token = request.form["order_token"]
     new_status = request.form["new_status"]
+    print("#order token", order_token)
+    if new_status not in ["pending", "delivering", "delivered", "cancelled"]:
+        return jsonify({"message": "invalid new status option" }), 404
     
-    if new_status not in ["pending", "delivering", "delivered"]:
-        return jsonify({"message": "invalid new status option" })
+
+    order_info = OrderInfo.query.filter_by(token=order_token).first()
     
-    order_info = OrderInfo.query.get(order_id)
+    if not order_info:
+        return jsonify({"message": "Invalid token"}), 404
+
+    elif order_info.status != "pending" and new_status == "cancelled":
+        return jsonify({"message": "Cannot change non pending status"}), 405
+
+
     order_info.status = new_status
     db.session.commit()
-
     # flash("status changed successfully", category="success")
     return jsonify({"message": "status has been changed successfully"})
+    
 
 
 @views.route("/insert_order", methods=["POST"])

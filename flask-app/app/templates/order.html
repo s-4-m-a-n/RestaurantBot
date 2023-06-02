@@ -40,14 +40,17 @@
 
                                 {% if order.status == 'pending' %} {% set btn_class = "secondary" %} {% elif order.status == "delivering" %} {% set btn_class = "warning" %} {% elif order.status == "delivered" %} {% set btn_class = "success" %} {% endif %}
 
-                                <button class="btn btn-{{btn_class}} dropdown-toggle" type="button" id="statusDropdown_{{ order['id']}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-{{btn_class}} dropdown-toggle" type="button" id="statusDropdown_{{ order['token']}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{ order.status}}
                             </button>
-                                <div class="dropdown-menu" aria-labelledby="statusDropdown" data-order_id="{{ order['id'] }}">
+                                <div class="dropdown-menu" aria-labelledby="statusDropdown" data-order_id="{{ order['id'] }}" data-order_token="{{ order['token'] }}">
                                     <ul>
                                         <li><a class="dropdown-item" href="#" data-status="pending">Pending</a></li>
                                         <li><a class="dropdown-item" href="#" data-status="delivering">Delivering</a></li>
                                         <li><a class="dropdown-item" href="#" data-status="delivered">Delivered</a></li>
+                                        <li><a class="dropdown-item" href="#" data-status="cancelled">cancelled</a></li>
+
+
                                     </ul>
                                 </div>
                             </div>
@@ -148,7 +151,7 @@
         // Get the status value from the data attribute
         var new_status = $(this).data('status');
         // Get the order ID from the parent card
-        var order_id = $(this).closest('.dropdown-menu').data('order_id');
+        var order_token = $(this).closest('.dropdown-menu').data('order_token');
 
         let text = "Do you want to change to status?";
         if (confirm(text) == false) {
@@ -160,16 +163,17 @@
             url: '/update_order_status',
             type: 'POST',
             data: {
-                'order_id': order_id,
+                'order_token': order_token,
                 'new_status': new_status
             },
             success: function(data) {
                 status_color_mapper = {
                     "pending": "btn-secondary",
                     "delivering": "btn-warning",
-                    "delivered": "btn-success"
+                    "delivered": "btn-success",
+                    "cancelled": "btn-secondary"
                 }
-                var btn = $("#statusDropdown_" + order_id)
+                var btn = $("#statusDropdown_" + order_token)
                 btn.text(new_status)
 
                 btn.removeClass(function(index, className) {

@@ -67,3 +67,14 @@ stories:
     - requested_slot: null
   - active_loop: null
   - action: action_show_order_status
+
+
+- story: canceling the order
+  steps:
+    - intent: cancel_order
+    - action: token_form
+    - active_loop: token_form
+    - slot_was_set:
+      - requested_slot: null
+    - active_loop: null
+    - action: action_cancel_order

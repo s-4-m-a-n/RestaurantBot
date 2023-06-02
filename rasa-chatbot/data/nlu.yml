@@ -86,7 +86,7 @@ nlu:
   examples: |
     - delivery address is [belbari-2, Morang](delivery_address)
 
-- intent: ask_order_status
+- intent: check_order_status
   examples: |
     - Can you show me the order status
     - Can I get my order status
@@ -99,6 +99,7 @@ nlu:
     - [12bs1](token)
     - this is my order token [F1a2F](token)
 
-
-
- 
+- intent: cancel_order
+  examples: |
+    - I would like to cancel my order
+    - Please Cancel the order

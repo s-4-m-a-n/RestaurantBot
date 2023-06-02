@@ -43,5 +43,5 @@ policies:
     enable_fallback_prediction: True
   - name: MemoizationPolicy
   - name: TEDPolicy
-    epochs: 20
+    epochs: 50
     # max_history: 8
