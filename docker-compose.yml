@@ -14,7 +14,9 @@ services:
       depends_on:
         - rasa_server
       environment:
-        - RASA_SERVER_URL=http://localhost:5005/webhooks/rest/webhook
+        # - RASA_SERVER_URL=http://localhost:5005/webhooks/rest/webhook
+        - RASA_SERVER_URL=https://s-4-m-a-n-miniature-barnacle-7r6qvg4gwg7fxr5x-5005.preview.app.github.dev/
+
           # - RASA_SERVER_URL=http://rasa_server:5005/
 
   rasa_server:
@@ -28,7 +30,8 @@ services:
     networks:
       - my-network
     volumes:
-      - ./rasa-chatbot:/app
+      - ./rasa-chatbot: /app
+      - ./rasa-chatbot/models:/app/models
     environment:
       - RASA_ACTIONS_ENDPOINT=http://rasa_actions:5055/webhook
 

@@ -4,11 +4,11 @@ FROM rasa/rasa:3.5.6-full
 # Copy the Rasa chatbot files to the container
 WORKDIR  /app
 
-COPY . .
+COPY . /app
 
 USER root
 
-# RUN  rasa train
+RUN  rasa train
 
 # Expose the Rasa server ports
 EXPOSE 5005
