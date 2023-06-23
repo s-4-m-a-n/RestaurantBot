@@ -39,8 +39,6 @@ class ActionShowMenu(Action):
         else:
             output_msg = "general menu image"
             # response = self.fetch_menu()
-           
-                
 
         dispatcher.utter_message(text=output_msg, image='http://localhost:5000/get_menu')
         
@@ -149,14 +147,12 @@ class ActionShowOrderDetail(Action):
             order_info += "Cuisine: {0} | quantity: {1} \n".format(order['cuisine'], order['quantity'])
 
         display_msg = f"Your order details:\n\
-                    Name: {name}\n\
-                    Contact number: {contact_number}\n\
-                    Delivery_address: {delivery_address}\n\
-                    order: \n\t{order_info}\n\
-                Comments: {comments}\n\
-                Do you want to confirm your order?\n"
+                    Name: {name}\t Contact number: {contact_number}\n\
+                    Delivery_address: {delivery_address}\t order: \n\t{order_info}\n\
+                    Comments: {comments}"
         
         dispatcher.utter_message(text=display_msg)
+        dispatcher.utter_message(text= "Do you want to confirm your order?")
         return []
 
 
@@ -169,7 +165,13 @@ class ActionSubmitOrderDetail(Action):
         endpoint_API = f'{base_URL}/insert_order'  # Replace with the actual URL of your Flask API endpoint
         response = requests.post(endpoint_API, json=order_info)
         return  response
-        
+    
+    @staticmethod
+    def generate_invoice(token):
+        endpoint_API = f"{base_URL}/gen_invoice"
+        response = requests.get(endpoint_API, params={"token": token})
+        return response
+    
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
@@ -179,7 +181,30 @@ class ActionSubmitOrderDetail(Action):
         # logging.debug("#response:", response)
         if response.status_code == 200:
             data = json.loads(response.text)
-            print("#data: ", data)
-            dispatcher.utter_message(text="order has been succssfully saved, your  order token: {}".format(data["token"]))
-  
+            token = data["token"]
+            dispatcher.utter_message(text="order has been succssfully saved, your  order token: {}".format(token))
+            print("token", data["token"])
+            # response_2 = self.generate_invoice(token)
+
+            # if response_2.status_code == 200:
+            #     data = json.loads(response_2.text)
+        
+            #     # dispatcher.utter_message(text="click the link to download the invoice \n{}".format(data["link"]))
+            #     pdf_base64 = base64.b64encode(data).decode("utf-8")
+
+            #     # Construct the message payload
+            #     message = {
+            #         "attachment": {
+            #             "payload": pdf_base64,
+            #             "type": "application/pdf"
+            #         }
+            #     }
+
+                # dispatcher.utter_message(text="Here is the order invoice: ", json_message=message)
+            # dispatcher.utter_message(text="Visit the link to download the pdf", attachement=f'http://localhost:5000/gen_invoice?token={token}')
+            dispatcher.utter_message(text=f"Visit the link to download the pdf: http://localhost:5000/gen_invoice?token={token}")
+
+
+            return [SlotSet("orders", []), SlotSet("token", token)]
+        
         return [SlotSet("orders", [])]
