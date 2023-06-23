@@ -4,6 +4,7 @@ from . import db
 from .models import OrderInfo, OrderItem
 import os
 import requests
+from .invoice_generator import Invoice, generate_pdf
 
 
 views = Blueprint('order_views', __name__)
@@ -112,3 +113,33 @@ def get_order_status():
 def get_menu():
     menu_file = "./static/images/menu.jpg"
     return send_file(menu_file, mimetype="image/jpeg")
+
+
+@views.route("/gen_invoice", methods=['GET'])
+def gen_invoice():
+    token = request.args.get("token")
+
+    order_info = OrderInfo.query.filter_by(token=token).first()
+    if not order_info:
+        return jsonify({"message": "token doesnot exist"}), 404
+    
+    invoice = Invoice(order_info.full_name, order_info.contact_number, order_info.token, str(order_info.reg_date))
+
+    order_items = OrderItem.query.filter_by(order_id = order_info.id).all()
+
+    for order_item in order_items:
+        invoice.add_cuisine(order_item.item, order_item.quantity, 200)
+
+    flag = generate_pdf(invoice)
+
+    invoice_file_name = "../gen-invoice-pdfs/invoice_{}.pdf".format(token)
+    # return jsonify({"link": invoice_file_name})
+    return send_file(invoice_file_name, mimetype="application/pdf")
+
+
+# @views.route("/get_invoice", methods=["GET"])
+# def get_invoice():
+#     token = request.args.get("token")
+#     invoice_file_name = "./gen-invoice-pdfs/invoice_{}.pdf".format(token)
+
+    

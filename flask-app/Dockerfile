@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python:3.7.16-alpine
+FROM python:3.7.16
 
 # Set the working directory
 WORKDIR /app
@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy the requirements file
 COPY requirements.txt .
 
+# RUN apt-get install libjpeg-dev zlib1g-dev
+# RUN pip install --no-cache-dir --upgrade pip
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 

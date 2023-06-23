@@ -2,3 +2,4 @@ Flask==2.2.5
 flask_sqlalchemy==3.0.3
 SQLAlchemy==1.4.48
 Requests==2.30.0
+reportlab
