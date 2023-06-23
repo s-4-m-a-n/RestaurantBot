@@ -161,6 +161,7 @@ cython_debug/
 
 **/instance/
 **/models/
+!flask-app/app/models
 **/.*
 
 !**/.gitignore

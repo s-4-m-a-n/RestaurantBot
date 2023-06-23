@@ -1,5 +1,5 @@
 from reportlab.pdfgen import canvas
-
+import os
 
 class Invoice:
     def __init__(self, customer_name, contact_number, token_id, date):
@@ -20,6 +20,8 @@ class Invoice:
         )
 
 def generate_pdf(invoice):
+    os.makedirs("gen-invoice-pdfs", exist_ok=True)
+    
     c = canvas.Canvas("gen-invoice-pdfs/invoice_{}.pdf".format(invoice.token_id), pagesize=(200, 250), bottomup=0)
     c.setFillColorRGB(7/255, 14/255, 23/255)
     c.line(70, 22, 180, 22)

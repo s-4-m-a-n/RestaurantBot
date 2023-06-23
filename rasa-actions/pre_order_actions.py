@@ -147,11 +147,13 @@ class ActionShowOrderDetail(Action):
             order_info += "Cuisine: {0} | quantity: {1} \n".format(order['cuisine'], order['quantity'])
 
         display_msg = f"Your order details:\n\
-                    Name: {name}\t Contact number: {contact_number}\n\
-                    Delivery_address: {delivery_address}\t order: \n\t{order_info}\n\
-                    Comments: {comments}"
+                        Name: {name}\n\
+                        Contact number: {contact_number}\n\
+                        Delivery_address: {delivery_address}\n\
+                        order: {order_info}"
         
         dispatcher.utter_message(text=display_msg)
+        dispatcher.utter_message(text=f"Comments: {comments}")
         dispatcher.utter_message(text= "Do you want to confirm your order?")
         return []
 
