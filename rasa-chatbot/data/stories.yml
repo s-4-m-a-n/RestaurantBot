@@ -60,7 +60,7 @@ stories:
 
 - story: Checking order status
   steps:
-  - intent: ask_order_status
+  - intent: check_order_status
   - action: token_form
   - active_loop: token_form
   - slot_was_set:

@@ -6,6 +6,9 @@ nlu:
     - I am hungry, can you show me the menu
     - I would like to order something
     - menu please
+    - I would like to make an order
+    - I'm feeling famished, could you display the menu for me?
+    - I'm interested in placing an order.
 
 - intent: greet
   examples: |
@@ -63,33 +66,74 @@ nlu:
     - can you show me the [non veg]{"entity":"cuisine_type", "value":"non-veg"} menu?
     - [Non-vegetarian]{"entity":"cuisine_type", "value":"non-veg"} item?
     - I would like to have some [non veg]{"entity":"cuisine_type", "value":"non-veg"} cuisine, can you show me the menu?
+    - [veg]{"entity": "cuisine_type", "value": "veg"} menu please
+
+
 
 - intent: make_order
   examples: |
-    - I would like to order [2](quantity) [chicken tikka](cuisine) and [4](quantity) plate [salad](cuisine)
+    - I would like to order [4](quantity) [chicken tikka](cuisine) and [4](quantity) plate [Caesar salad](cuisine)
     - Can I get [chicken tikka](cuisine)?
-
+    - Can you please add [3](quantity) orders of [Samosa](cuisine) and [4](quantity) plates of [egg roll](cuisine) to my order?
+    - I'd like to order [1](quqantity) [large pizza](cuisine), please.
+    - I'm interested in getting [2](quantity) [chicken biryanis](cuisine) and [3](quantity) orders of [garlic naan](cuisine).
+    - I'm interested in getting [1](quantity) order of [sushi rolls](cuisine) and [3](cuisine) plates of [miso soup](cuisine), please.
+    - Please add [1](quantity) [seafood paella](cuisine) and [6](quantity) servings of [chicken fajitas](cuisine) to my order.
+    - I'd like to order [5](quantity) [cheeseburgers](cuisine), please.
+    - I'm interested in getting [1](quantity) order of [sushi rolls](cuisine) (chef's choice), [3](quantity) bowls of [veg soup](cuisine), and [a green tea ice cream](cuisine) for dessert.
+    - Can you include [4](quantity) servings of [shrimp scampi](cuisine) and [3](quantity) plates of [pad thai noodles](cuisine) in my order?
+    - I'm interested in getting [1](quantity) order of [sushi rolls](cuisine) (chef's choice) and [3](quantity) bowls of [miso soup](cuisine), please.
+    - Can I get [3](quantity) servings of [barbecue ribs](cuisine) with a side of coleslaw, [5](quantity) plates of [seasoned fries](cuisine), and [a large soda](cuisine), please?
+    - I would like to order [4](quantity) helpings of [vegetable lasagna](cuisine) and [2](quantity) plates of [Greek salad](cuisine) with extra dressing, please.
 
 - intent: full_name
   examples: |
     - My name is [Suman Dhakal](full_name)
-    - This is [Suman Dhakal](full_name)
+    - This is [Rikesh Nepal](full_name)
     - Place the order under [Ram Bahadur](full_name)
+    - Can you kindly take the order under the name [Krishna Dulal](full_name)?
+    - My complete name is [John Smith](full_name).
+    - The name I go by is [Michael Anderson](full_name), in full.
+    - I'm [Raj Dhimal](full_name).
+    - You can address me as [Daniel Roberts](full_name)
+    - You can put the order under the name [Noah Roberts](full_name).
+    - The order should be placed under the name [Oliver Martinez](full_name).
+    - Please attribute the order to the name [Ethan Johnson](full_name).
+    - Please register the order under the name [James Harris](full_name).
+    - You can put the order under the name [Noah Roberts](full_name).
+    - Please place the order under my name [Mia Taylor](full_name).
 
 - intent: contact_number
   examples: |
     - my mobile number is [9827332211](contact_number)
-    - It is [9827332211](contact_number)
-    - [9827332211](contact_number)
+    - It is [980333201](contact_number)
+    - [9818332619](contact_number)
+    - Please use [123-456-7890](contact_number) as my contact number.
+    - You can contact me at [980-234-1234](contact_number)
+    - My preferred contact number is [981-236-0669](contact_number).
 
 - intent: delivery_address
   examples: |
     - delivery address is [belbari-2, Morang](delivery_address)
+    - You can deliver to [lalbitti-3, Morang, Nepal](delivery_address).
+    - The delivery address is [321 Pine Street, Hamletown, UK](delivery_address).
+    - Please send it to [777 Cedar Court, Villagetown, France](delivery_address).
+    - Please send the package to [222 Elm Street, Boroughland, Japan](delivery_address)
+    - please send it to [sahakari tole, Lalitpur](delivery_address).
+    - [Sahakari tole, Kritipur](delivery_address)
+    - You can deliver to [Birch Lane, Pashupatinath, Kathmandu](delivery_address).
 
 - intent: check_order_status
   examples: |
     - Can you show me the order status
     - Can I get my order status
+    - Can you please show me the current status of my order?
+    - Could you provide me with an update on the status of my order?
+    - Can you provide me with information regarding the status of my order?
+    - I would like to inquire about the order status. Can you help me with that?
+    - Can you please inform me of the current status of my order?
+
+    
 
 - intent: give_token
   examples: |
@@ -98,8 +142,15 @@ nlu:
     - token [bcd1F](token)
     - [12bs1](token)
     - this is my order token [F1a2F](token)
+    - My token number is [xvu12](token). Can you please check the status of my order?
+    - I have a token labeled [F1a2F](token) for my order.
 
 - intent: cancel_order
   examples: |
     - I would like to cancel my order
     - Please Cancel the order
+    - I would like to cancel my order. Can you assist me with that?
+    - Please cancel the order I placed. I have changed my mind.
+    - I no longer need the order. Can you help me cancel it?
+    - Can you assist me in canceling my order, please?
+    - Can you cancel the order I placed? I realized I don't need it anymore.

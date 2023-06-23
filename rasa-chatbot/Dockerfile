@@ -8,7 +8,9 @@ COPY . /app
 
 USER root
 
-RUN  rasa train
+# RUN mkdir ./models_1
+# ENV RASA_MODEL_DIR=/app/models_1
+RUN ["rasa", "train"]
 
 # Expose the Rasa server ports
 EXPOSE 5005
