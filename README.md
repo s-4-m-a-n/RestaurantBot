@@ -6,7 +6,7 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)<br/>
 
-The OrderEats Bot is a proof of concept project powered by Rasa that aims to provide a seamless food ordering experience. With advanced natural language processing capabilities, it allows users to effortlessly place food orders, track their status, and receive personalized recommendations based on their preferences.
+The Restaurant Bot is a proof of concept project powered by Rasa that aims to provide a seamless food ordering experience. With advanced natural language processing capabilities, it allows users to effortlessly place food orders, track their status, and receive personalized recommendations based on their preferences.
 
 ## Features
 
