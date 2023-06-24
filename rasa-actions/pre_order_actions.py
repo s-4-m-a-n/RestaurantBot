@@ -143,14 +143,14 @@ class ActionShowOrderDetail(Action):
         comments = slots["comments"]
         order_info = ""
 
-        for order in slots['orders']:
-            order_info += "Cuisine: {0} | quantity: {1} \n".format(order['cuisine'], order['quantity'])
+        for index, order in enumerate(slots['orders']):
+            order_info += "{0}: {1}({2}) \n".format(index+1, order['cuisine'], order['quantity'])
 
         display_msg = f"Your order details:\n\
                         Name: {name}\n\
                         Contact number: {contact_number}\n\
                         Delivery_address: {delivery_address}\n\
-                        order: {order_info}"
+                        order: \n{order_info}"
         
         dispatcher.utter_message(text=display_msg)
         dispatcher.utter_message(text=f"Comments: {comments}")
