@@ -28,18 +28,23 @@ $ sudo docker compose up --build
 ```
 
 **4. Train the model manually**
+
    - **get inside rasa-server container**
-    ```bash
-    $ docker exec -it rasa-server sh
-    ```
-    - **train rasa model**
-    ```bash
-    $ rasa train --fixed-model-name mymodel
-    ```
+     
+ ```bash
+ $ docker exec -it rasa-server sh
+ ```
+    
+   - **train rasa model**
+     
+ ```bash
+ $ rasa train --fixed-model-name mymodel
+ ```
 ## Endpoints
 once the docker compose is up you can visit the following link to check out the chatbot
 
 - `http://localhost:5000/chat`
+  
 - `http://localhost:5000/`
 
 ## Usage
