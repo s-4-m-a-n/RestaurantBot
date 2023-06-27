@@ -15,10 +15,13 @@ def create_app():
     db.init_app(app)
 
     from .order_views import views
+    from .menu_views import menu
 
     app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(menu, url_prefix='/menu')
 
-    from .models import OrderInfo, OrderItem
+
+    from .models import OrderInfo, OrderItem, MenuItems
     # create db
     with app.app_context():
         db.create_all()

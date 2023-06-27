@@ -75,7 +75,9 @@ class ValidateRestaurantForm(FormValidationAction):
     @staticmethod
     def cuisine_db() -> List[Text]:
         """Database of supported cuisines"""
-        return ["chicken tikka", "pizza"]
+        endpoint_API = f'{base_URL}/menu/get_menu_items'
+        available_cuisines = requests.get(endpoint_API)
+        return available_cuisines
     
     @staticmethod
     def clean_name(name):
@@ -95,7 +97,7 @@ class ValidateRestaurantForm(FormValidationAction):
         print("validate slot value: ", slot_value)
 
         for order in slot_value:
-            if order['cuisine'] in self.cuisine_db():
+            if order['cuisine'].lower() in self.cuisine_db():
                 validated_orders.append(order)
         
         if validated_orders:

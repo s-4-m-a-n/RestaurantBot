@@ -81,7 +81,7 @@ once the docker compose is up you can visit the following link to check out the 
 ![Demo](https://github.com/s-4-m-a-n/RestaurantBot/blob/main/screenshots/demo.gif)
 
 ## Contributing
-Contributions are welcome! If you'd like to contribute to the OrderEats Bot project, please follow these steps:
+Contributions are welcome! If you'd like to contribute to the ResBot project, please follow these steps:
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and commit them.

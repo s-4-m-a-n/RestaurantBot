@@ -15,17 +15,21 @@ def get_random_string(length=5):
 
 def generate_unique_token():
     rand_str = get_random_string()
-
     # # possibility of same random number is very low.
     # # but if you want to make sure, here you can check id exists in database.
     # db_session_maker = sessionmaker(bind=db_engine)
     # db_session = db_session_maker()
-
-
     # while db_session.query(OrderInfo).filter(token == rand_str).limit(1).first() is not None:
     #     rand_str = get_random_string()
-
     return rand_str
+
+class MenuItems(db.Model):
+    c_id= db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String, nullable=False)
+    cuisine_name = db.Column(db.String, nullable=False)
+    rate = db.Column(db.Float, nullable=False)
+    discount = db.Column(db.Float, nullable=False, default=0.0)
+    discount_per = db.Column(db.Integer, nullable=False, default=1) 
 
 
 class OrderInfo(db.Model):

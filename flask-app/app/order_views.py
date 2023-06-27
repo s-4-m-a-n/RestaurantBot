@@ -1,7 +1,7 @@
 from flask import (Blueprint, render_template, request, 
                    flash, jsonify, redirect, url_for, send_file)
 from . import db
-from .models import OrderInfo, OrderItem
+from .models import OrderInfo, OrderItem, MenuItems
 import os
 import requests
 from .invoice_generator import Invoice, generate_pdf
@@ -44,15 +44,12 @@ def update_order_status():
     if new_status not in ["pending", "delivering", "delivered", "cancelled"]:
         return jsonify({"message": "invalid new status option" }), 404
     
-
     order_info = OrderInfo.query.filter_by(token=order_token).first()
     
     if not order_info:
         return jsonify({"message": "Invalid token"}), 404
-
     elif order_info.status != "pending" and new_status == "cancelled":
         return jsonify({"message": "Cannot change non pending status"}), 405
-
 
     order_info.status = new_status
     db.session.commit()
@@ -100,6 +97,7 @@ def delete_order(id):
     # Delete correspondig items
     return redirect(url_for("order_views.show_orders"))
 
+
 @views.route("/get_order_status", methods=['GET'])
 def get_order_status():
     token = request.args.get("token")
@@ -108,6 +106,7 @@ def get_order_status():
         return jsonify({"message": "token doesnot exist"}), 404
     
     return order.status
+
 
 @views.route("/get_menu", methods=['GET'])
 def get_menu():
@@ -118,17 +117,35 @@ def get_menu():
 @views.route("/gen_invoice", methods=['GET'])
 def gen_invoice():
     token = request.args.get("token")
-
     order_info = OrderInfo.query.filter_by(token=token).first()
     if not order_info:
         return jsonify({"message": "token doesnot exist"}), 404
     
-    invoice = Invoice(order_info.full_name, order_info.contact_number, order_info.token, str(order_info.reg_date))
-
+    invoice = Invoice(order_info.full_name,
+                      order_info.contact_number,
+                      order_info.token,
+                      str(order_info.reg_date),
+                      order_info.address)
+    
     order_items = OrderItem.query.filter_by(order_id = order_info.id).all()
-
+    menu_items = {
+            item.cuisine_name.lower(): {
+                    "rate": item.rate,
+                    "category": item.category,
+                    "discount": item.discount,
+                    "discount_per": item.discount_per
+                } for item in MenuItems.query.all()
+            }
+    
     for order_item in order_items:
-        invoice.add_cuisine(order_item.item, order_item.quantity, 200)
+        menu_item = menu_items[order_item.item.lower()]
+        invoice.add_cuisine(
+                    order_item.item,
+                    order_item.quantity,
+                    menu_item["rate"],
+                    menu_item["discount"],
+                    menu_item["discount_per"]
+                )
 
     flag = generate_pdf(invoice)
 

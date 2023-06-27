@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block title %}Order management{% endblock %} {% block content %}
+<!-- Menu Form -->
+<div class="container container_form mt-5">
+    <h2><b>Menu Form</b></h2>
+    <form action="/menu/insert_item" method="POST">
+      <div class="form-group">
+        <label for="cuisineName">Cuisine Name:</label>
+        <input type="text" class="form-control" id="cuisine_name" name="cuisine_name" placeholder="Enter cuisine name" required>
+      </div>
+      <div class="form-group">
+        <label for="rate">Rate:</label>
+        <input type="number" step="0.01" class="form-control" id="rate" name="rate" placeholder="Enter rate" required>
+      </div>
+      <div class="form-group">
+        <label for="discount">Discount:</label>
+        <input type="number" step="0.01" class="form-control" id="discount" name="discount" placeholder="Enter discount" required>
+      </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select class="form-control" id="category" name="category" required>
+          <!-- <option value="">Select category</option> -->
+          <option value="veg">Veg</option>
+          <option value="non-veg">Non-veg</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="discountPercentage">Discount Per n Items:</label>
+        <input type="number" class="form-control" id="discount_per" name="discount_per" placeholder="Enter number of items" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+<!-- Menu Form ends -->
+<!-- Menu Items -->
+<div class="container">
+    <h2 class="bg-secondary"><b>Menu Items</b></h2>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="bg-info">
+                        <th>Id</th>
+                        <th>Cuisine Name</th>
+                        <th>Category</th>
+                        <th>Rate</th>
+                        <th>Discount</th>
+                        <th>Discount Per</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in menu_items %}
+                    <tr>
+                        <td>{{ item.c_id }}</td>
+                        <td>{{ item.cuisine_name}}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.rate }}</td>
+                        <td>{{ item.discount }}</td>
+                        <td>{{ item.discount_per }}</td>
+
+                        <td>
+                            <a class="btn btn-primary" data-method="edit" href="#" onclick="return confirm('Are you sure you want to edit this item?')">
+                            Edit
+                            </a>
+                            <a class="btn btn-danger" data-method="delete" href="/menu/delete_item/{{ item['c_id'] }}" onclick="return confirm('Data will be permanently deleted, Are you sure?')">
+                            Delete
+                            </a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

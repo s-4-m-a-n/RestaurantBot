@@ -9,12 +9,34 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-        
+    <style>
+        .container_form {
+          max-width: 500px;
+        }
+        .form-group label {
+          font-weight: bold;
+        }
+        .form-group input[type="number"],
+        .form-group select {
+          width: 100%;
+        }
+        .form-group .input-group-prepend .input-group-text {
+          border-radius: 0 0.25rem 0.25rem 0;
+        }
+        .form-group .input-group-append .input-group-text {
+          border-radius: 0.25rem 0 0 0.25rem;
+        }
+        .form-group select {
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          background: url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/img/bootstrap-select.svg") no-repeat right center/10% auto;
+        }
+      </style>    
 </head>
 <body>
 
     {% with messages = get_flashed_messages(with_categories=true) %} 
-        <p> {{ messages }} </p>
         {% if messages %} 
             {% for category, message in messages %} 
                 {% if category == 'error' %}
