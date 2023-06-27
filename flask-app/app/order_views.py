@@ -3,7 +3,6 @@ from flask import (Blueprint, render_template, request,
 from . import db
 from .models import OrderInfo, OrderItem, MenuItems
 import os
-import requests
 from .invoice_generator import Invoice, generate_pdf
 
 
